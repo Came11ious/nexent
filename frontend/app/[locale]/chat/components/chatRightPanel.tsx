@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, Database, X } from "lucide-react";
+import { ExternalLink, Database, X, Server } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -387,40 +387,57 @@ export function ChatRightPanel({
 
           <div className="mt-2 text-sm flex justify-between items-center">
             <div
-              className="flex items-center overflow-hidden"
+              className="flex flex-col overflow-hidden"
               style={{ flex: 1, minWidth: 0 }}
             >
-              <div className="w-3 h-3 flex-shrink-0 mr-1">
-                {source_type === "url" ? (
-                  <ExternalLink className="w-full h-full" />
-                ) : source_type === "file" || source_type === "datamate" ? (
-                  <Database className="w-full h-full" />
-                ) : null}
-              </div>
               {source_type === "file" || source_type === "datamate" ? (
-                <a
-                  href="#"
-                  onClick={handleFileDownload}
-                  className="text-blue-600 hover:underline truncate cursor-pointer"
-                  style={{
-                    maxWidth: "75%",
-                    display: "inline-block",
-                  }}
-                  title={formatUrl(result)}
-                >
-                  {filename || formatUrl(result)}
-                </a>
+                <>
+                  <div className="flex items-center min-w-0">
+                    <div className="w-3 h-3 flex-shrink-0 mr-1">
+                      <Database className="w-full h-full" />
+                    </div>
+                    <a
+                      href="#"
+                      onClick={handleFileDownload}
+                      className="text-blue-600 hover:underline truncate cursor-pointer"
+                      style={{
+                        maxWidth: "75%",
+                        display: "inline-block",
+                      }}
+                      title={formatUrl(result)}
+                    >
+                      {filename || formatUrl(result)}
+                    </a>
+                  </div>
+                  <div className="flex items-center mt-0.5 min-w-0">
+                    <div className="w-3 h-3 flex-shrink-0 mr-1">
+                      <Server className="w-full h-full" />
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {source_type === "datamate"
+                        ? t("chatRightPanel.source.datamate", "来源: Datamate")
+                        : source_type === "file"
+                        ? t("chatRightPanel.source.nexent", "来源: Nexent")
+                        : ""}
+                    </div>
+                  </div>
+                </>
               ) : (
-                <span
-                  className="text-gray-500 truncate"
-                  style={{
-                    maxWidth: "75%",
-                    display: "inline-block",
-                  }}
-                  title={formatUrl(result)}
-                >
-                  {formatUrl(result)}
-                </span>
+                <div className="flex items-center min-w-0">
+                  <div className="w-3 h-3 flex-shrink-0 mr-1">
+                    <ExternalLink className="w-full h-full" />
+                  </div>
+                  <span
+                    className="text-gray-500 truncate"
+                    style={{
+                      maxWidth: "75%",
+                      display: "inline-block",
+                    }}
+                    title={formatUrl(result)}
+                  >
+                    {formatUrl(result)}
+                  </span>
+                </div>
               )}
             </div>
 
