@@ -1,5 +1,6 @@
 import logging
 from http import HTTPStatus
+from urllib.parse import quote
 
 import aiohttp
 
@@ -16,8 +17,9 @@ logger = logging.getLogger("image_service")
 async def proxy_image_impl(decoded_url: str):
     # Create session to call the data processing service
     async with aiohttp.ClientSession() as session:
-        # Call the data processing service to load the image
-        data_process_url = f"{DATA_PROCESS_SERVICE}/tasks/load_image?url={decoded_url}"
+        # Encode URL for query string safety
+        encoded_url = quote(decoded_url, safe="")
+        data_process_url = f"{DATA_PROCESS_SERVICE}/tasks/load_image?url={encoded_url}"
 
         async with session.get(data_process_url) as response:
             if response.status != HTTPStatus.OK:
@@ -28,6 +30,7 @@ async def proxy_image_impl(decoded_url: str):
 
             result = await response.json()
             return result
+
 
 def get_vlm_model(tenant_id: str):
     # Get the tenant config
